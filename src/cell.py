@@ -13,9 +13,9 @@ class Cell:
     def get_symbol(self, cell):
         """ Return cell symbol from cell type """
 
-        if cell['type'] == self.BLACK:
+        if cell['type'] == BLACK:
             return "○"
-        if cell['type'] == self.WHITE:
+        if cell['type'] == WHITE:
             return "●"
 
         return " "
