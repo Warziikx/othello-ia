@@ -1,7 +1,8 @@
+EMPTY = "empty"
+WHITE = "white"
+BLACK = "black"
 class Cell:
-    EMPTY = "empty"
-    WHITE = "white"
-    BLACK = "black"
+
     def __init__(self):
         pass
 
