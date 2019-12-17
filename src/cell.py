@@ -22,7 +22,7 @@ class Cell:
 
 
     def get_types(self):
-        return {self.WHITE, self.BLACK, self.EMPTY}
+        return {WHITE, BLACK, EMPTY}
 
 
     def extract_positions(self, cells):
