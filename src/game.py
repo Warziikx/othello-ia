@@ -3,13 +3,13 @@ from src.board import Board
 
 
 class Game:
-    def __init__(self, xSize, ySize):
-        self.board = None
-        self._x = xSize
-        self._y = ySize
+    def __init__(self, x, y, board, *args, **kwargs):
+        self.board = board
+        self.x = x
+        self.y = y
 
     def start(self):
-        board = Board(self._x, self._y)
+        board = Board(self.x, self.y)
         board.new_board()
         self.board = board.board
 

@@ -1,6 +1,7 @@
 EMPTY = "empty"
 WHITE = "white"
 BLACK = "black"
+PLAYABLE = "playable"
 class Cell:
 
     def __init__(self):
