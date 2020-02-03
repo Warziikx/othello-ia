@@ -9,3 +9,6 @@ class Cell:
         self.yPos = yPos
         self.cType = cType
 
+    def toString(self):
+        return self.cType
+
