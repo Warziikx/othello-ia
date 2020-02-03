@@ -1,5 +1,6 @@
+# coding: utf-8
 from .board import Board
-from .cell import BLACK, WHITE, EMPTY, PLAYABLE
+from .cell import Cell, EMPTY, PLAYABLE
 from itertools import product
 import operator
 
@@ -22,37 +23,41 @@ class Game:
         return self.board.matrix
     
     # get moves per cell
-    def getAvailableMovesForOneCell(self, myCell):
-        print("cell base x:", myCell.xPos, " y: ", myCell.yPos, "type: ", myCell.cType)
-        opponentColor = myCell.getOpponentColor()
+    def getAvailableMovesForOneCell(self, currentCell):
+        print("--- cell base x:", currentCell.xPos, " y: ", currentCell.yPos, "type: ", currentCell.cType)
+        opponentColor = currentCell.getOpponentColor()
 
         for vector in self.directionnal_vectors:
             print('vector: ', vector)
-            try:
-                distance = 1
-                xNextCell = myCell.xPos + distance * vector[1]
-                yNextCell = myCell.yPos + distance * vector[0]
-                nextCell = self.board.getCell(xNextCell, yNextCell)
-                print("x1:", xNextCell, " y1: ", yNextCell, "type: ", nextCell.cType)
-                
-                while (nextCell.cType == opponentColor and nextCell.cType != EMPTY and nextCell.cType != PLAYABLE):
-                    try:
-                        distance += 1
-                        xNextCell = cell.xPos + distance * vector[1]
-                        yNextCell = cell.yPos + distance * vector[0]
-                        nextCell = self.board.getCell(xNextCell, yNextCell)
 
-                        print("x:", xNextCell, " y: ", yNextCell, " type:", nextCell.cType)
-                    except:
-                        print("Out of bound 1, distance: ", distance)
-                        break
-            except:
-                print("Out of bound 2")
-                continue 
+            # comptage du nombre d'opposants
+            opponentNumber = 0
+            distance = 1
 
-            if nextCell.cType == EMPTY:
-                self.board.matrix[nextCell.xPos][nextCell.yPos].cType = PLAYABLE
-                print(" ")  
+            # calcul de la cellule suivante dans la direction donnée
+            nextCell = self.calculateNextCell(currentCell, distance, vector)
+            print("x:", nextCell.xPos, " y: ", nextCell.yPos, " type:", nextCell.cType)
+
+            while (nextCell.cType == opponentColor and nextCell.cType != EMPTY and nextCell.cType != PLAYABLE):
+                opponentNumber += 1               
+                distance += 1
+
+                # calcul de la prochaine cellule dans la direction donnée
+                nextCell = self.calculateNextCell(currentCell, distance, vector)
+                print("x:", nextCell.xPos, " y: ", nextCell.yPos, " type:", nextCell.cType)                    
+
+                # La case est jouable dans le cas ou elle passe par au moins un opposant et que cette case est vide
+                if nextCell.cType == EMPTY and opponentNumber > 0:
+                    print("je passe la cellule x: ", nextCell.xPos, " y: ", nextCell.yPos, " à Playable")
+                    self.board.matrix[nextCell.yPos][nextCell.xPos].cType = PLAYABLE
+
+            print(" ")
+
+    def calculateNextCell(self, startingCell, distance, direction):
+        x = startingCell.xPos + distance * direction[0]
+        y = startingCell.yPos + distance * direction[1]
+        return self.board.getCell(x, y)
+
 
     def printBoard(self):
         self.board.printBoard()     

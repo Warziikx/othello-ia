@@ -1,3 +1,4 @@
+# coding: utf-8
 EMPTY = "empty"
 WHITE = "white"
 BLACK = "black"

@@ -1,4 +1,6 @@
+# coding: utf-8
 from .cell import Cell, EMPTY, WHITE, BLACK
+
 class Board:
     def __init__(self, size):
         self.size = size
@@ -21,11 +23,12 @@ class Board:
 
     # Print board in console
     def printBoard(self):
-        print("-------")
+        print(" ")
         for x in range(self.size):
             for y in range(self.size):
                 print(self.matrix[x][y].toString(), end=" ")
             print(" ")
+        print(" ")
 
     def getCell(self, x, y):
         return self.matrix[x][y]
