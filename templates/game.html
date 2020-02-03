@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Othello</title>
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/style.css">
+</head>
+<body>
+<div class="container">
+    <div class="columns">
+        <div class="column col-6 col-mx-auto">
+            <h1>Othello</h1>
+            <div class="columns">
+                <div class="column col-6"><h3>Tour n° {{ turn }}</h3></div>
+                <div class="column col-2 col-ml-auto">
+                    <a class="btn" href="/">New Game</a>
+                </div>
+            </div>
+
+            <table class="table">
+                <tbody>
+                {% for x in board %}
+                    <tr class="active">
+                        {% for y in x %}
+                            {% if y == None %}
+                                <td>
+                                    <div></div>
+                                </td>
+                            {% elif y =='white' %}
+                                <td>
+                                    <div><i class="icon icon-2x icon-stop white"></i></div>
+                                </td>
+                            {% elif y == 'black' %}
+                                <td>
+                                    <div><i class="icon icon-2x icon-stop black"></i></div>
+                                </td>
+                            {% elif y == 'playable' %}
+                                <td>
+                                    <div><i class="icon icon-2x icon-stop black"></i></div>
+                                </td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -28,7 +28,7 @@ table {
 }
 
 .table tbody tr.active, .table.table-striped tbody tr.active {
-    background: green;
+    background: #5755d9;
 }
 
 .users {

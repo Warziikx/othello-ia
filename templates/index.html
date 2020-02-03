@@ -11,30 +11,34 @@
 <div class="container">
     <div class="columns">
         <div class="column col-6 col-mx-auto">
-            <h1>Othello</h1>
-            <table class="table">
-                <tbody>
-                {% for x in board %}
-                    <tr class="active">
-                        {% for y in x %}
-                            {% if y == None %}
-                                <td>
-                                    <div></div>
-                                </td>
-                            {% elif y =='white' %}
-                                <td>
-                                    <div><i class="icon icon-2x icon-stop white"></i></div>
-                                </td>
-                            {% elif y == 'black' %}
-                                <td>
-                                    <div><i class="icon icon-2x icon-stop black"></i></div>
-                                </td>
-                            {% endif %}
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            <h1>Bienvenue sur le jeu du Othello</h1>
+            <h3>Paramétrer votre jeu</h3>
+            <form action="/new" method="post">
+                <div class="columns">
+                    <div class="column col-6">
+                        <div class="form-group">
+                            <label class="form-label" for="size">Taille du plateau</label>
+                            <input class="form-input" type="number" value="8" name="size" id="size"
+                                   placeholder="Taille du plateau">
+                        </div>
+                    </div>
+                    <div class="column col-6">
+                        <div class="form-group">
+                            <label class="form-label" for="difficulty">Choisissez une difficulté</label>
+                            <select class="form-select" id="difficulty" name="difficulty">
+                                <option value="1">Facile</option>
+                                <option value="3">Normal</option>
+                                <option value="6">Difficile</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns" style="margin-top: 10px">
+                    <div class="column col-12 col-mx-auto">
+                        <button class="btn btn-primary btn-lg">Jouer</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
