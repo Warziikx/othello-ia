@@ -11,11 +11,13 @@
 <div class="container">
     <div class="columns">
         <div class="column col-6 col-mx-auto">
-            <h1>Othello</h1>
+            <h1>Othello {{ difficulty }}</h1>
             <div class="columns">
                 <div class="column col-6"><h3>Tour n° {{ turn }}</h3></div>
                 <div class="column col-2 col-ml-auto">
-                    <a class="btn" href="/">New Game</a>
+                    <a class="btn" href="/"
+                       onclick="return confirm('Etes vous sur de vouloir recommencer une nouvelle partie');">New
+                        Game</a>
                 </div>
             </div>
 
