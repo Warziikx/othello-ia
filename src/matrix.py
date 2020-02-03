@@ -12,3 +12,13 @@ class Matrix:
             return (0, 0)
 
         return (len(matrix[0]), rows_count)
+    
+    def get_cell(self, matrix, xPos, yPos, default=None):
+    """ Return cell value, return default if no one is find """
+        try:
+            # Disable negative index functionnality
+            if yPos < 0 or xPos < 0:
+                raise IndexError
+            return matrix[yPos][xPos]
+        except LookupError:
+            return default
