@@ -14,7 +14,7 @@ class Matrix:
         return (len(matrix[0]), rows_count)
     
     def get_cell(self, matrix, xPos, yPos, default=None):
-    """ Return cell value, return default if no one is find """
+    # Return cell value, return default if no one is find
         try:
             # Disable negative index functionnality
             if yPos < 0 or xPos < 0:
