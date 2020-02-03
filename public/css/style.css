@@ -1,0 +1,44 @@
+.table td {
+    border: .05rem solid black;
+    padding: 0;
+    width: 12.5%;
+}
+.table td div {
+    overflow: hidden;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.white {
+    color: white;
+    background-color: white;
+}
+
+.black {
+    color: black;
+    background-color: black;
+}
+
+.table tbody tr.active, .table.table-striped tbody tr.active {
+    background: green;
+}
+
+.users {
+    table-layout: fixed;
+    width: 100%;
+    white-space: nowrap;
+}
+
+.users td {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
