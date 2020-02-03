@@ -1,5 +1,8 @@
 import json
 from flask import Flask, render_template, send_from_directory, session, redirect, url_for, request
+from src.cell import Cell, WHITE
+from collections import namedtuple
+
 from src.game import Game
 
 Difficulty = {2: 'Facile', 4: 'Normal', 6: 'Difficile'}

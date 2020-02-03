@@ -26,4 +26,7 @@ class Board:
             for y in range(self.size):
                 print(self.matrix[x][y].toString(), end=" ")
             print(" ")
+
+    def getCell(self, x, y):
+        return self.matrix[x][y]
         

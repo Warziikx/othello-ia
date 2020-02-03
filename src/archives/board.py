@@ -1,6 +1,5 @@
 from .matrix import Matrix
 from .cell import Cell, EMPTY, WHITE, BLACK
-from .vector import Vector
 
 
 class Board:

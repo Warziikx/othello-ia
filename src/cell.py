@@ -10,5 +10,20 @@ class Cell:
         self.cType = cType
 
     def toString(self):
-        return self.cType
+        if self.cType == WHITE:
+            return "b"
+        elif self.cType == BLACK:
+            return "n"
+        elif self.cType == EMPTY:
+            return "-"
+        else:
+            return "j"
+
+    def getOpponentColor(self):
+        if (self.cType == WHITE):
+            return BLACK
+        elif (self.cType == BLACK):
+            return WHITE
+        else:
+            raise ValueError("Les cellules Vide ou Jouable n'ont pas d'opposé")
 
