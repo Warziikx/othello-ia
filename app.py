@@ -67,8 +67,10 @@ def play():
             minmax = MinMax(game)
             (x, y) = minmax.best_move(BLACK)
             game.board.make_move(x, y, BLACK)
-            game.board.get_playable()
             # Après traitement
+            if game.board.is_terminal(BLACK):
+                print('Yo')
+    game.board.get_playable()
     session['game'] = game.toJSON()
     session['turn'] = turn
     return render_template('game.html', board=game.board.board, turn=turn, difficulty=session['difficulty'])

@@ -34,8 +34,8 @@ class MinMax:
         v = self.maxEvalBoard if maximizingPlayer else self.minEvalBoard
         for x in range(self.game.size):
             for y in range(self.game.size):
-                boardTemp = copy.deepcopy(board)
-                if boardTemp.is_valid_move(x, y, player):
+                if board.is_valid_move(x, y, player):
+                    boardTemp = copy.deepcopy(board)
                     totctr = boardTemp.make_move(x, y, player)
                     alpha_beta_return = self.AlphaBeta(boardTemp, player, depth - 1, alpha, beta, not maximizingPlayer)
                     alpha_beta_return = int(alpha_beta_return)
