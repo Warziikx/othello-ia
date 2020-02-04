@@ -26,21 +26,22 @@
                 {% for x in board %}
                     <tr class="active">
                         {% for y in x %}
-                            {% if y == None %}
+                            {% if y.type == 'empty' %}
                                 <td>
                                     <div></div>
                                 </td>
-                            {% elif y =='white' %}
+                            {% elif y.type =='white' %}
                                 <td>
                                     <div><i class="icon icon-2x icon-stop white"></i></div>
                                 </td>
-                            {% elif y == 'black' %}
+                            {% elif y.type == 'black' %}
                                 <td>
                                     <div><i class="icon icon-2x icon-stop black"></i></div>
                                 </td>
-                            {% elif y == 'playable' %}
+                            {% elif y.type == 'playable' %}
                                 <td>
-                                    <div><i class="icon icon-2x icon-stop black"></i></div>
+                                    <div><a href="/game?x={{ y.x }}&y={{ y.y }}" style="color : red">Jouer ici</a>
+                                    </div>
                                 </td>
                             {% endif %}
                         {% endfor %}

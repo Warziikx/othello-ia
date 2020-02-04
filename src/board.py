@@ -1,82 +1,99 @@
-from .matrix import Matrix
-from .cell import Cell, EMPTY, WHITE, BLACK
+import copy
+
+from .cell import Cell, EMPTY, WHITE, BLACK, PLAYABLE
 from .vector import Vector
+
+dirx = [-1, 0, 1, -1, 1, -1, 0, 1]
+diry = [-1, -1, -1, 0, 0, 1, 1, 1]
 
 
 class Board:
 
-    def __init__(self, xSize, ySize):
-        self.matrix = Matrix()
+    def __init__(self, size, board=[], *args, **kwargs):
         self.vector = Vector()
-        self.cell = Cell()
-        self.board = []
-        self.xSize = xSize
-        self.ySize = ySize
+        self.board = board
+        self.size = int(size)
 
     def is_even(self, x):
         return x % 2 == 0
 
     def new_board(self):
-        if not self.is_even(self.xSize) or not self.is_even(self.ySize):
+        if not self.is_even(self.size) or not self.is_even(self.size):
             raise ValueError("Board x/y size must be even.")
-        if self.ySize < 4 or self.xSize < 4:
+        if self.size < 4 or self.size < 4:
             raise ValueError("Board must have 4 rows or columns at least")
-        self.board = self.matrix.new_matrix(self.xSize, self.ySize)
+        # self.board
+        for x in range(self.size):
+            self.board.append([])
+            for y in range(self.size):
+                self.board[x].append(Cell(x, y))
         departure_pos = self.get_departure_cells(self.board)
-        self.board[departure_pos[0]['x']][departure_pos[0]['y']] = departure_pos[0]['type']
-        self.board[departure_pos[1]['x']][departure_pos[1]['y']] = departure_pos[1]['type']
-        self.board[departure_pos[2]['x']][departure_pos[2]['y']] = departure_pos[2]['type']
-        self.board[departure_pos[3]['x']][departure_pos[3]['y']] = departure_pos[3]['type']
+        self.board[departure_pos[0].x][departure_pos[0].y] = departure_pos[0]
+        self.board[departure_pos[1].x][departure_pos[1].y] = departure_pos[1]
+        self.board[departure_pos[2].x][departure_pos[2].y] = departure_pos[2]
+        self.board[departure_pos[3].x][departure_pos[3].y] = departure_pos[3]
+        for x in range(self.size):
+            for y in range(self.size):
+                self.board[x][y] = Cell(x, y, PLAYABLE) if self.is_valid_move(x, y, WHITE) else self.board[x][y]
 
     def get_departure_cells(self, matrix):
-        xSize, ySize = self.matrix.get_size(matrix)
-        x_middle = int(xSize / 2)
-        y_middle = int(ySize / 2)
+        x_middle = int(self.size / 2)
+        y_middle = int(self.size / 2)
         return [
-            self.cell.new_cell(x_middle, y_middle, BLACK),
-            self.cell.new_cell(x_middle - 1, y_middle - 1, BLACK),
-            self.cell.new_cell(x_middle - 1, y_middle, WHITE),
-            self.cell.new_cell(x_middle, y_middle - 1, WHITE)
+            Cell(x_middle, y_middle, BLACK),
+            Cell(x_middle - 1, y_middle - 1, BLACK),
+            Cell(x_middle - 1, y_middle, WHITE),
+            Cell(x_middle, y_middle - 1, WHITE)
         ]
 
-    def get_flipped_cells_from_cell_change(self, cell):
-        flipped_cells = []
-        empty_cell = self.cell.new_cell(0, 0, EMPTY)
-        xPos, yPos, cType = cell['x'], cell['y'], cell['type']
-        if not self.matrix.get_cell(self.board, xPos, yPos, empty_cell)['type'] is EMPTY:
-            return []
+    def is_valid_move(self, x, y, player):
+        if x < 0 or x > self.size - 1 or y < 0 or y > self.size - 1:
+            return False
+        if self.board[x][y].type != EMPTY:
+            return False
+        tempBoard = copy.deepcopy(self)
+        totctr = tempBoard.make_move(x, y, player)
+        if totctr == 0:
+            return False
+        return True
 
-        # Loop over all possibles directions (except null vector)
-        for vector in self.vector.get_directionnal_vectors():
-            vector_add_generator = self.vector.get_vector_add_generator((xPos, yPos), vector)
-            vector_flipped_cells = []
+    def eval(self, player):
+        value = 0
+        for y in range(self.size):
+            for x in range(self.size):
+                if self.board[y][x] == player:
+                    if (x == 0 or x == self.size - 1) and (y == 0 or y == self.size - 1):
+                        value += 4  # Coin
+                    elif (x == 0 or x == self.size - 1) or (y == 0 or y == self.size - 1):
+                        value += 2  # coté
+                    else:
+                        value += 1
+        return value
 
-            # While there's no empty cell, same color disk or border, go forward
-            for (x, y) in vector_add_generator:
-                if self.matrix.get_cell(self.board, x, y, empty_cell)['type'] in [EMPTY, cType]:
+    def make_move(self, x, y, player):  # assuming valid move
+        totctr = 0  # total number of opponent pieces taken
+        self.board[y][x] = Cell(x, y, player)
+        for d in range(8):  # 8 directions
+            ctr = 0
+            for i in range(self.size):
+                dx = x + dirx[d] * (i + 1)
+                dy = y + diry[d] * (i + 1)
+                if dx < 0 or dx > self.size - 1 or dy < 0 or dy > self.size - 1:
+                    ctr = 0
                     break
-                vector_flipped_cells.append(c.new_cell(x, y, cType))
-
-            # If the're flipped disks and last cell has same type, it's ok
-            last_cell = self.matrix.get_cell(self.board, x, y, empty_cell)
-            if len(vector_flipped_cells) > 0 and last_cell['type'] is cType:
-                flipped_cells += vector_flipped_cells
-
-        return flipped_cells
-
-    def is_legal_cell_change(self, cell):
-        return len(self.get_flipped_cells_from_cell_change(cell)) > 0
-
-    def get_legal_cell_changes(self):
-        """ Return legal cell changes for each types """
-
-        legal_cell_changes = {WHITE: [], BLACK: []}
-        cell = Cell()
-        for cType in [WHITE, BLACK]:
-            for row_idx, row in enumerate(self.board):
-                for col_idx, col in enumerate(row):
-                    cell_change = cell.new_cell(col_idx, row_idx, cType)
-                    if self.is_legal_cell_change(cell_change):
-                        legal_cell_changes[cType].append(cell_change)
-
-        return legal_cell_changes
+                elif self.board[dy][dx].type == player:
+                    break
+                elif self.board[dy][dx].type == EMPTY:
+                    ctr = 0
+                    break
+                elif self.board[dy][dx].type == PLAYABLE:
+                    ctr = 0
+                    break
+                else:
+                    ctr += 1
+            for i in range(ctr):
+                dx = x + dirx[d] * (i + 1)
+                dy = y + diry[d] * (i + 1)
+                self.board[dy][dx] = player
+            totctr += ctr
+        return totctr

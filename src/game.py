@@ -1,18 +1,23 @@
+import copy
 import json
 from src.board import Board
 
 
 class Game:
-    def __init__(self, x, y, board, *args, **kwargs):
+    def __init__(self, size, board, depth, *args, **kwargs):
         self.board = board
-        self.x = x
-        self.y = y
+        self.size = size
+        self.depth = depth
+        # self.minEvalBoard = -1  # min - 1
+        # self.maxEvalBoard = self.x * self.x + 4 * self.x + 4 + 1  # max + 1
 
     def start(self):
-        board = Board(self.x, self.y)
+        board = Board(self.size)
         board.new_board()
-        self.board = board.board
+        self.board = board
+        print(self.board)
 
-    def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__,
+    def toJSON(self):
+        data = json.dumps(self, default=lambda o: o.__dict__,
                           sort_keys=True, indent=4)
+        return data

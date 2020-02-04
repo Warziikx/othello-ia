@@ -1,6 +1,9 @@
 import json
 from flask import Flask, render_template, send_from_directory, session, redirect, url_for, request
+
+from src.board import Board
 from src.game import Game
+from src.cell import Cell, EMPTY, WHITE, BLACK, PLAYABLE
 
 Difficulty = {2: 'Facile', 4: 'Normal', 6: 'Difficile'}
 
@@ -11,6 +14,7 @@ app.secret_key = 'GwH!wXhhug#8G$j5$&pHGnat'
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/store')
 def store():
@@ -31,36 +35,43 @@ def new():
         session.pop('difficulty')
 
     # création du nouveau jeu
-    game = Game(size, size, None)
+    game = Game(size, None, difficulty)
     game.start()
     turn = 1
     # ajout du novueau jeu en session
     session['difficulty'] = Difficulty[difficulty]
-    session['game'] = game.to_json()
+    session['game'] = game.toJSON()
     session['turn'] = turn
     return redirect(url_for('play'))
 
 
 @app.route('/game')
 def play():
-    play = request.args.get('play')
+    xPlayed = request.args.get('x')
+    yPlayed = request.args.get('y')
     turn = session['turn']
     data = json.loads(session['game'])
     game = Game(**data)
+    game.board = Board(**game.board)
     # Traitement
     # Si il y'a une valeur
-    if play is not None:
-        turn = turn + 1
-
+    if xPlayed is not None and yPlayed is not None:
+        xPlayed = int(xPlayed)
+        yPlayed = int(yPlayed)
+        if game.board.is_valid_move(xPlayed, yPlayed, WHITE):
+            game.board.make_move(xPlayed, yPlayed, WHITE)
+            turn = turn + 1
     # Après traitement
-    session['game'] = game.to_json()
+    session['game'] = game.toJSON()
     session['turn'] = turn
-    return render_template('game.html', board=game.board, turn=turn, difficulty=session['difficulty'])
+    print(game.board.board)
+    return render_template('game.html', board=game.board.board, turn=turn, difficulty=session['difficulty'])
 
 
 @app.route('/public/css/<path:path>')
 def send_css(path):
     return send_from_directory('public/css', path)
+
 
 @app.route('/public/img/<path:path>')
 def send_img(path):
