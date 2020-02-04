@@ -9,8 +9,6 @@ class Game:
         self.size = size
         self.board = Board(self.size)
         self.board.initBoard()
-        # self.directionnal_vectors = product((-1, 0, 1), (-1, 0, 1))
-        # self.directionnal_vectors = (vectors for vectors in self.directionnal_vectors if not vectors == (0, 0))
         self.directionnal_vectors = [(-1, -1), (0, -1), (1, -1), (-1, 0), (1, 0), (-1, 1), (0, 1), (1, 1)]
 
     # get available moves depending of player (White, Black)
@@ -44,7 +42,11 @@ class Game:
 
                 # calcul de la prochaine cellule dans la direction donnée
                 nextCell = self.calculateNextCell(currentCell, distance, vector)
-                print("x:", nextCell.xPos, " y: ", nextCell.yPos, " type:", nextCell.cType)                    
+                print("x:", nextCell.xPos, " y: ", nextCell.yPos, " type:", nextCell.cType)  
+
+                # cas de la sortie du plateau de jeu
+                if nextCell == None:
+                    break                  
 
                 # La case est jouable dans le cas ou elle passe par au moins un opposant et que cette case est vide
                 if nextCell.cType == EMPTY and opponentNumber > 0:

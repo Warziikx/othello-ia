@@ -31,5 +31,5 @@ class Board:
         print(" ")
 
     def getCell(self, x, y):
-        return self.matrix[x][y]
+        return self.matrix[x][y] ? self.matrix[x][y] : None
         
