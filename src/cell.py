@@ -32,10 +32,3 @@ class Cell:
 
     def extract_positions(self, cells):
         return list(map(lambda cell: (cell['x'], cell['y']), cells))
-
-    def is_terminal(self, board, player):
-        for y in range(self.x):
-            for x in range(self.x):
-                if self.ValidMove(board, x, y, player):
-                    return False
-        return True

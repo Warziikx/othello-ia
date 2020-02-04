@@ -1,9 +1,11 @@
 import json
+
 from flask import Flask, render_template, send_from_directory, session, redirect, url_for, request
 
 from src.board import Board
+from src.cell import WHITE, BLACK
 from src.game import Game
-from src.cell import Cell, EMPTY, WHITE, BLACK, PLAYABLE
+from src.minmax import MinMax
 
 Difficulty = {2: 'Facile', 4: 'Normal', 6: 'Difficile'}
 
@@ -35,6 +37,7 @@ def new():
         session.pop('difficulty')
 
     # création du nouveau jeu
+    game = None
     game = Game(size, None, difficulty)
     game.start()
     turn = 1
@@ -61,10 +64,13 @@ def play():
         if game.board.is_valid_move(xPlayed, yPlayed, WHITE):
             game.board.make_move(xPlayed, yPlayed, WHITE)
             turn = turn + 1
-    # Après traitement
+            minmax = MinMax(game)
+            (x, y) = minmax.best_move(BLACK)
+            game.board.make_move(x, y, BLACK)
+            game.board.get_playable()
+            # Après traitement
     session['game'] = game.toJSON()
     session['turn'] = turn
-    print(game.board.board)
     return render_template('game.html', board=game.board.board, turn=turn, difficulty=session['difficulty'])
 
 
