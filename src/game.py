@@ -8,8 +8,8 @@ class Game:
         self.board = board
         self.size = size
         self.depth = depth
-        # self.minEvalBoard = -1  # min - 1
-        # self.maxEvalBoard = self.x * self.x + 4 * self.x + 4 + 1  # max + 1
+        # self.min_eval_board = -1  # min - 1
+        # self.max_eval_board = self.x * self.x + 4 * self.x + 4 + 1  # max + 1
 
     def start(self):
         board = Board(self.size)
