@@ -27,7 +27,7 @@ def store():
 def new():
     # recupération des parametres du form ou assignation par défault
     size = int(request.form.get('size')) if request.form.get('size') is not None else 8
-    difficulty = int(request.form.get('difficulty')) if request.form.get('difficulty') is not None else 3
+    difficulty = int(request.form.get('difficulty')) if request.form.get('difficulty') is not None else 2
     # remove old game data
     if session.get('turn'):
         session.pop('turn')
@@ -50,26 +50,23 @@ def new():
 
 @app.route('/game')
 def play():
-    xPlayed = request.args.get('x')
-    yPlayed = request.args.get('y')
+    x_played = request.args.get('x')
+    y_played = request.args.get('y')
     turn = session['turn']
     data = json.loads(session['game'])
     game = Game(**data)
     game.board = Board(**game.board)
     # Traitement
     # Si il y'a une valeur
-    if xPlayed is not None and yPlayed is not None:
-        xPlayed = int(xPlayed)
-        yPlayed = int(yPlayed)
-        if game.board.is_valid_move(xPlayed, yPlayed, WHITE):
-            game.board.make_move(xPlayed, yPlayed, WHITE)
+    if x_played is not None and y_played is not None:
+        x_played = int(x_played)
+        y_played = int(y_played)
+        if game.board.is_valid_move(x_played, y_played, WHITE):
+            game.board.make_move(x_played, y_played, WHITE)
             turn = turn + 1
             minmax = MinMax(game)
             (x, y) = minmax.best_move(BLACK)
             game.board.make_move(x, y, BLACK)
-            # Après traitement
-            if game.board.is_terminal(BLACK):
-                print('Yo')
     game.board.get_playable()
     session['game'] = game.toJSON()
     session['turn'] = turn

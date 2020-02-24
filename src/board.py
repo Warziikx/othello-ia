@@ -56,8 +56,8 @@ class Board:
             return False
         if self.board[x][y].type != EMPTY and self.board[x][y].type != PLAYABLE:
             return False
-        tempBoard = copy.deepcopy(self)
-        totctr = tempBoard.make_move(x, y, player)
+        temp_board = copy.deepcopy(self)
+        totctr = temp_board.make_move(x, y, player)
         if totctr == 0:
             return False
         return True
